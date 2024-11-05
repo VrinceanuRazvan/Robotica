@@ -5,7 +5,7 @@
 #define LED3 8
 #define LED4 7
 #define RED_RGB 6
-#define GREEN_RGB 5
+#define GREEN_RGB 5 
 #define RESET_BUTTON 3
 #define START_BUTTON 2
 #define CHARGE_LEVEL_DELAY 3000
@@ -16,7 +16,7 @@
 
 bool isCharging = false, blinkOn = true;
 uint16_t levelTimer = 0, resetHoldTimer = 0, blinkTimer = 0;
-uint8_t chargeLevel = 0, chargeDebounceTimer = 0;
+uint8_t chargeLevel = 0, timer = 0;
 
 void setup() {
   pinMode(LED1, OUTPUT);
@@ -56,12 +56,12 @@ void resetStation() {
 
 void handleCharge() {
   if (digitalRead(START_BUTTON) == LOW && !isCharging) {
-    chargeDebounceTimer++;
-    if (chargeDebounceTimer > DEBOUNCE_OFFSET) {
+    timer++;
+    if (timer > DEBOUNCE_OFFSET) {
       digitalWrite(RED_RGB, HIGH);
       digitalWrite(GREEN_RGB, LOW);
       isCharging = true;
-      chargeDebounceTimer = 0;
+      timer = 0;
     }
   }
   if (!isCharging)
@@ -125,5 +125,4 @@ void loop() {
   handleCharge();
   handleLEDBlink();
   handleReset();
-  delay(1);
 }
